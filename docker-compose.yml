@@ -1,0 +1,101 @@
+version: "3.9"
+
+services:
+
+  user-ms:
+    container_name: user-ms
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    image: user-ms:alphine 
+    volumes:
+      - ./user/src:/app/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  notification-ms:
+    container_name: notification-ms
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    image: notification-ms:alphine 
+    volumes:
+      - ./notification/src:/app/src 
+    ports:
+      - "8001:8001"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres: 
+        condition: service_started
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=event-driven-user
+      - POSTGRES_DB=event-driven_db
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 10
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=event-driven-user
+      - POSTGRES_DB=event-driven_db
+    ports:
+      - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: S3cret
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pg-data:
+  pgadmin-data:
+
+#volumes:
+#  user_data: 
+#    driver: local # Define the driver and options under the volume name
+#    driver_opts:
+#      type: none
+#      device: /opt/projects/event-driven-ms/user/src
+#      o: bind
+
+networks:
+  default:
+    driver: bridge
