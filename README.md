@@ -3,6 +3,7 @@ It provide a template of:
 - API = Express
 - Unit Testing = Jest
 - Swagger = Tsoa
+- Code Quality = Eslint
 - Containerization = docker, kubernetes
 - ESB = RabbotMQ 
 - PostGres
