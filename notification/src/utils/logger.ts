@@ -33,7 +33,8 @@ class loggerutils {
 
   private logDir = process.env.LOG_FOLDER || 'logs'
 
-  private logger: any
+  //private logger: winston.Logger;
+  private logger:any
 
   private _init = false
 

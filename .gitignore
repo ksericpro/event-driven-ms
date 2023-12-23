@@ -1,2 +1,5 @@
 docs/
 .env
+**/logs
+**/node_modules
+**/build

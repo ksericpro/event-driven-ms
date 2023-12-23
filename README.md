@@ -19,4 +19,4 @@ PGADMIN_DEFAULT_EMAIL: admin@admin.com
 PGADMIN_DEFAULT_PASSWORD: S3cret
 
 ## Links
-[Kubernetes] (https://medium.com/@mrcyna/simple-nodejs-project-with-typescript-and-kubernetes-part-1-929c04955ffd)
+[Kubernetes Part 1] (https://medium.com/@mrcyna/simple-nodejs-project-with-typescript-and-kubernetes-part-1-929c04955ffd)

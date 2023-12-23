@@ -1,15 +1,9 @@
-// import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import express, { Request, Response } from 'express'
 
 // Setting up Environment
 import Config from './config/config'
 import createMQConsumer from './utils/consumer'
-
-// Logger
-import loggerutils from './utils/logger'
-
-// dotenv.config()
 
 console.log('Loading Config=', Config)
 process.env.APP_NAME = Config.APP_NAME
@@ -18,20 +12,26 @@ process.env.LOG_FOLDER = Config.LOG_FOLDER
 process.env.PORT = String(Config.PORT)
 process.env.AMQP_URL = Config.AMQP_URL
 process.env.QUEUE_NAME = Config.QUEUE_NAME
-const logger = loggerutils.getInstance().getLogger()
 
-const PORT = parseInt(String(process.env.PORT), 10) || 3000
-const AMQP_URL = String(process.env.AMQP_URL)
-const QUEUE_NAME = String(process.env.QUEUE_NAME)
+//Logger
+import loggerutils from './utils/logger';
+const logger = loggerutils.getInstance().getLogger();
 
-const app = express()
-const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME)
+//RabbitMQ
+const AMQP_URL = String(process.env.AMQP_URL);
+const QUEUE_NAME = String(process.env.QUEUE_NAME);
+const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME);
+consumer();
 
-consumer()
+//Constants
+const PORT = process.env.PORT || 8001;
+
+//Express
+const app = express();
 app.use(bodyParser.json())
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World')
+  res.send('Welcome to Notification MS')
 })
 
 // Main

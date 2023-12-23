@@ -19,14 +19,14 @@ const createMQConsumer = (amqpURl: string, queueName: string) => {
           if (msg) {
             const parsed = JSON.parse(msg.content.toString())
             switch (parsed.action) {
-              case 'REGISTER':
-                console.log('Consuming REGISTER action', parsed.data)
-                break
-              case 'LOGIN':
-                console.log('Consuming LOGIN action', parsed.data)
-                break
-              default:
-                break
+            case 'REGISTER':
+              console.log('Consuming REGISTER action', parsed.data)
+              break
+            case 'LOGIN':
+              console.log('Consuming LOGIN action', parsed.data)
+              break
+            default:
+              break
             }
           }
         }, { noAck: true })

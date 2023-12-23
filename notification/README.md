@@ -1,3 +1,6 @@
+## install dependencies
+- npm init @eslint/config
+
 ## setup
 - npm install
 - npm run build
