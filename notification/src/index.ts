@@ -18,10 +18,7 @@ import loggerutils from './utils/logger';
 const logger = loggerutils.getInstance().getLogger();
 
 //RabbitMQ
-const AMQP_URL = String(process.env.AMQP_URL);
-const QUEUE_NAME = String(process.env.QUEUE_NAME);
-const consumer = createMQConsumer(AMQP_URL, QUEUE_NAME);
-consumer();
+const consumer = createMQConsumer(String(process.env.AMQP_URL), String(process.env.QUEUE_NAME));
 
 //Constants
 const PORT = process.env.PORT || 8001;
@@ -31,11 +28,13 @@ const app = express();
 app.use(bodyParser.json())
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Notification MS')
+  res.json({ message: 'Welcome to the coolest notification API on earth!' });
 })
 
 // Main
 async function main() {
+  consumer();
+
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`)
   })
