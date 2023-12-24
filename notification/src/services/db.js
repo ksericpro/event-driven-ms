@@ -23,7 +23,7 @@ const createTables = () => {
         action VARCHAR(128) NOT NULL,
         email VARCHAR(128) NOT NULL,
         password VARCHAR(128) NOT NULL,
-        transaction_date VARCHAR(128) NOT NULL
+        transaction_date TIMESTAMP
       )`;
   pool.query(auditLogTable)
     .then((res) => {

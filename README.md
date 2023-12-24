@@ -68,3 +68,5 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 [Postgres without orm] (https://dev.to/ogwurujohnson/-persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5)
 
 [Postgres without orm-git] (https://github.com/ogwurujohnson/AwesomeNodePostgres)
+
+[Postgres Pool] (https://node-postgres.com/apis/pool)

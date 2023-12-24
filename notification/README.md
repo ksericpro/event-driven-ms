@@ -5,6 +5,7 @@
 ## setup
 - npm install
 - npm run build
+- npm run create
 - npm start
 
 ## Docker
@@ -19,10 +20,10 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 
 ## Curl Scripts
 ### Api root
-- curl http://localhost:8000/notification/api/v1
+- curl http://localhost:8001/notification/api/v1
 
 ### Check API alive
-- curl localhost:8000/notification/api/v1/ping
+- curl localhost:8001/notification/api/v1/ping
 
 ### Postgres
 - curl localhost:8001/notification/api/v1/db

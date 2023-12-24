@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
 import express, { Request, Response } from 'express';
-import pool from './services/db';
 
 // Setting up Environment
 import Config from './config/config'
+import DBPool from './services/db';
 import createMQConsumer from './services/consumer'
 
 console.log('Loading Config=', Config)
@@ -11,6 +11,12 @@ process.env.APP_NAME = Config.APP_NAME
 process.env.NODE_ENV = Config.ENV
 process.env.LOG_FOLDER = Config.LOG_FOLDER
 process.env.PORT = String(Config.PORT)
+
+//Postgres
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_USER = process.env.DB_USER || 'event-driven-user'; 
+const DB_PASSWORD = process.env.DB_PASSWORD || 'S3cret'; 
+const DB_DATABASE = process.env.DB_DATABASE || 'event-driven_db'; 
 
 //RabbitMQ
 //process.env.AMQP_URL = "amqp://guest:guest@127.0.0.1:5672";
@@ -54,16 +60,15 @@ apiRoutes.get('/ping', (_req: Request, res: Response) => {
 })
 
 // Test Postgres - Query
-apiRoutes.get('/db', (_req: Request, res: Response) => {
-  pool.connect((_err, client, done) => {
-    const query = 'SELECT * FROM audit_logs';
-  
+apiRoutes.get('/db', async (_req: Request, res: Response) => {
+  const client = await DBPool.getInstance().acquireClient();
+  const query = 'SELECT * FROM audit_logs';
+  try { 
     client?.query(query, (error, result) => {
-      done();
       if (error) {
         res.status(400).json({error})
       } 
-
+  
       if(Number(result.rows)==0) {
         res.status(404).send({
           status: 'Failed',
@@ -77,43 +82,88 @@ apiRoutes.get('/db', (_req: Request, res: Response) => {
         });
       }
     });
-  });
+  } catch(err) {
+    res.status(500).send({
+      status: 'Failed',
+      message: 'Server Error',
+    });
+  } finally {
+    client?.release();
+  }
+   
 });
 
 // Test Postgres - Insert
-apiRoutes.post('/db', (req: Request, res: Response) => {
+apiRoutes.post('/db', async (req: Request, res: Response) => {
  
   const {email, password} = req.body;
-
   const data = {
     email : email,
     password : password,
     action : "REGISTER",
-    transaction_date :'123'
+    transaction_date : new Date()
   }
 
-  pool.connect((_err, client, done) => {
-    const query = 'INSERT INTO audit_logs(action, email, password, transaction_date) VALUES($1,$2,$3,$4) RETURNING *';
-    const values = [data.action, data.email, data.password, data.transaction_date];
+  const query = 'INSERT INTO audit_logs(action, email, password, transaction_date) VALUES($1,$2,$3,$4) RETURNING *';
+  const values = [data.action, data.email, data.password, data.transaction_date];
+  const client = await DBPool.getInstance().acquireClient();
 
+  try {
     client?.query(query, values, (error, result) => {
-      done();
       if (error) {
         res.status(400).json({error});
       }
-      res.status(202).send({
+      res.status(200).send({
         status: 'Successful',
         result: result.rows[0],
       });
     });
-  });
+  } catch(err) {
+    res.status(500).send({
+      status: 'Failed',
+      message: 'Server Error',
+    });
+  } finally {
+    client?.release();
+  }
 });
 
 // Main
 async function main() {
+  //Postgres
+  logger.info(`DB_HOST=${DB_HOST}, DB_USER=${DB_USER}, DB_PASSWORD=${DB_PASSWORD}, DB_DATABASE=${DB_DATABASE}`);
+  DBPool.getInstance().startPool(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
+
   //RabbitMQ
   logger.info(`AMQP_URL=${AMQP_URL}, QUEUE_NAME=${QUEUE_NAME}`);
-  const consumer = createMQConsumer(String(AMQP_URL), String(QUEUE_NAME));
+  var consumerCallback = async (parsed: any) : Promise<void> => {
+    console.log("consumerCallback->", parsed);
+    const client = await DBPool.getInstance().acquireClient();
+
+    try {
+      const {email, password} = parsed.data;
+      const data = {
+        email : email,
+        password : password,
+        action : parsed.action,
+        transaction_date : new Date()
+      }
+
+      const query = 'INSERT INTO audit_logs(action, email, password, transaction_date) VALUES($1,$2,$3,$4) RETURNING *';
+      const values = [data.action, data.email, data.password, data.transaction_date];
+      client?.query(query, values, (error, _result) => {
+        if (error) {
+          logger.error(error);
+        }
+        logger.info("Inserted Successfully");
+      });
+    } catch(err) {
+      logger.error(err);
+    } finally {
+      client?.release();
+    }
+  }
+  const consumer = createMQConsumer(String(AMQP_URL), String(QUEUE_NAME), consumerCallback);
   consumer();
 
   app.listen(PORT, () => {
@@ -122,7 +172,8 @@ async function main() {
 
   // Ctrl Break Handler
   process.on('SIGINT', () => {
-    console.log('Ctrl C detected')
+    console.log('Ctrl C detected');
+    DBPool.getInstance().endPool();
     process.exit()
   })
 

@@ -39,15 +39,18 @@ services:
     environment:
       - AMQP_URL=amqp://guest:guest@rabbitmq:5672
       - QUEUE=event_driven
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_USER=event-driven-user
-      - POSTGRES_DB=event-driven_db
+      - DB_HOST=postgres
+      - DB_PASSWORD=S3cret
+      - DB_USER=event-driven-user
+      - DB_DATABASE=event-driven_db
     links: 
       - rabbitmq
+      - postgres
 
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
+    restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -67,6 +70,7 @@ services:
   postgres:
     image: postgres:14-alpine
     container_name: postgres
+    restart: always
     environment:
       - POSTGRES_PASSWORD=S3cret
       - POSTGRES_USER=event-driven-user
