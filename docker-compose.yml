@@ -16,8 +16,10 @@ services:
       rabbitmq:
         condition: service_healthy
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - AMQP_URL=amqp://guest:guest@rabbitmq:5672
+      - QUEUE=event_driven
+    links: 
+      - rabbitmq
 
   notification-ms:
     container_name: notification-ms
@@ -35,8 +37,13 @@ services:
       postgres: 
         condition: service_started
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - AMQP_URL=amqp://guest:guest@rabbitmq:5672
+      - QUEUE=event_driven
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=event-driven-user
+      - POSTGRES_DB=event-driven_db
+    links: 
+      - rabbitmq
 
   rabbitmq:
     image: rabbitmq:management
@@ -44,9 +51,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_USER=event-driven-user
-      - POSTGRES_DB=event-driven_db
     ports:
       - "5672:5672"
       - "15672:15672"

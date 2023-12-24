@@ -1,9 +1,12 @@
-import winston from 'winston'
-import fs_extra from 'fs-extra'
-import DailyRotateFile from 'winston-daily-rotate-file'
+import winston from 'winston';
+import fs_extra from 'fs-extra';
+import DailyRotateFile from 'winston-daily-rotate-file';
+import Config from "../config/config";
+
+//console.log(`logfile=${Config.LOG_FOLDER}${Config.APP_NAME}-%DATE%.log`);
 
 const fileLog: DailyRotateFile = new DailyRotateFile({
-  filename: `${process.env.LOG_FOLDER}${process.env.APP_NAME}-%DATE%.log`,
+  filename: `${Config.LOG_FOLDER}${Config.APP_NAME}-%DATE%.log`,
   datePattern: 'YYYY-MM-DD-HH',
   zippedArchive: true,
   maxSize: '40m',
@@ -29,25 +32,24 @@ const consoleLog = new (winston.transports.Console)({
 })
 
 class loggerutils {
-  private static instance: loggerutils
+  private static instance: loggerutils;
 
-  private logDir = process.env.LOG_FOLDER || 'logs'
+  private logDir = Config.LOG_FOLDER || 'logs';
 
-  //private logger: winston.Logger;
-  private logger:any
+  private logger: any;
 
-  private _init = false
+  private _init = false;
 
   private constructor() {
-    console.log('loggerutils:contructor')
+    console.log('loggerutils:contructor');
   }
 
   public static getInstance(): loggerutils {
     if (!loggerutils.instance) {
-      loggerutils.instance = new loggerutils()
+      loggerutils.instance = new loggerutils();
     }
 
-    return loggerutils.instance
+    return loggerutils.instance;
   }
 
   init() {
@@ -57,20 +59,21 @@ class loggerutils {
     this.logger = winston.createLogger({
       transports: [
         consoleLog,
-        fileLog],
+        fileLog
+      ],
     })
 
-    this._init = true
+    this._init = true;
   }
 
   ping() {
-    return 'pong'
+    return 'pong';
   }
 
   getLogger() {
-    if (!this._init) this.init()
-    return this.logger
+    if (!this._init) this.init();
+    return this.logger;
   }
 }
 
-export default loggerutils
+export default loggerutils;
