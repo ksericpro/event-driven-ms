@@ -16,6 +16,7 @@ It provide a template of:
 ### Some
 - docker-compose build user-ms
 - docker-compose start user-ms rabbitmq
+- docker run -p 8888:80 --env PGADMIN_DEFAULT_EMAIL=admin@admin.com --env PGADMIN_DEFAULT_PASSWORD=S3cret dpage/pgadmin4
 
 ## Accessing RabbitMQ
 - Open browser to localhost:15672
@@ -63,3 +64,7 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 [Kubernetes] (https://medium.com/@mrcyna/simple-nodejs-project-with-typescript-and-kubernetes-part-1-929c04955ffd)
 
 [Docker-compose] (https://www.baeldung.com/ops/docker-compose-links-depends-on)
+
+[Postgres without orm] (https://dev.to/ogwurujohnson/-persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5)
+
+[Postgres without orm-git] (https://github.com/ogwurujohnson/AwesomeNodePostgres)

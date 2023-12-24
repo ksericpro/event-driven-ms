@@ -1,9 +1,10 @@
-import bodyParser from 'body-parser'
-import express, { Request, Response } from 'express'
+import bodyParser from 'body-parser';
+import express, { Request, Response } from 'express';
+import pool from './services/db';
 
 // Setting up Environment
 import Config from './config/config'
-import createMQConsumer from './utils/consumer'
+import createMQConsumer from './services/consumer'
 
 console.log('Loading Config=', Config)
 process.env.APP_NAME = Config.APP_NAME
@@ -17,7 +18,7 @@ const AMQP_URL = process.env.AMQP_URL || Config.AMQP_URL;
 const QUEUE_NAME = process.env.QUEUE_NAME || Config.QUEUE_NAME;
 
 //Logger
-import loggerutils from './utils/logger';
+import loggerutils from './services/logger';
 const logger = loggerutils.getInstance().getLogger();
 
 //Constants
@@ -39,9 +40,74 @@ app.use(function(req, res, next) {
   next(); // make sure we go to the next routes and don't stop here
 });
 
-app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'Welcome to the coolest notification API on earth!' });
+// API ROUTES 
+const apiRoutes = express.Router();
+
+app.use(process.env.APP_NAME + Config.API_VERSION, apiRoutes);
+
+apiRoutes.get('/', (_req: Request, res: Response) => {
+  res.json({message: 'Welcome to the coolest notification API on earth!'});
 })
+
+apiRoutes.get('/ping', (_req: Request, res: Response) => {
+  res.json({message: 'notification->pong'});
+})
+
+// Test Postgres - Query
+apiRoutes.get('/db', (_req: Request, res: Response) => {
+  pool.connect((_err, client, done) => {
+    const query = 'SELECT * FROM audit_logs';
+  
+    client?.query(query, (error, result) => {
+      done();
+      if (error) {
+        res.status(400).json({error})
+      } 
+
+      if(Number(result.rows)==0) {
+        res.status(404).send({
+          status: 'Failed',
+          message: 'No audit log information found',
+        });
+      } else {
+        res.status(200).send({
+          status: 'Successful',
+          message: 'Audit Log Information retrieved',
+          audit_logs: result.rows,
+        });
+      }
+    });
+  });
+});
+
+// Test Postgres - Insert
+apiRoutes.post('/db', (req: Request, res: Response) => {
+ 
+  const {email, password} = req.body;
+
+  const data = {
+    email : email,
+    password : password,
+    action : "REGISTER",
+    transaction_date :'123'
+  }
+
+  pool.connect((_err, client, done) => {
+    const query = 'INSERT INTO audit_logs(action, email, password, transaction_date) VALUES($1,$2,$3,$4) RETURNING *';
+    const values = [data.action, data.email, data.password, data.transaction_date];
+
+    client?.query(query, values, (error, result) => {
+      done();
+      if (error) {
+        res.status(400).json({error});
+      }
+      res.status(202).send({
+        status: 'Successful',
+        result: result.rows[0],
+      });
+    });
+  });
+});
 
 // Main
 async function main() {
