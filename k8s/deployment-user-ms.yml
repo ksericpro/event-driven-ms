@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-ms
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-ms-kubernetes
+  template:
+    metadata:
+      labels:
+        app: user-ms-kubernetes
+    spec:
+      containers:
+      - name: user-ms-kubernetes
+        image: ksericpro/user-ms:1.0.0
+        ports:
+        - containerPort: 8000
+      #  resources:
+      #limits:
+      #  memory: 512Mi
+      #  cpu: "1"
+      #requests:
+      #  memory: 256Mi
+      #  cpu: "0.2"
