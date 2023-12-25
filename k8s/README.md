@@ -6,6 +6,7 @@
 - [Micork8s] (https://thenewstack.io/deploy-a-single-node-kubernetes-instance-in-seconds-with-microk8s/)
 - [Dashboard] (https://www.server-world.info/en/note?os=Ubuntu_22.04&p=microk8s&f=4)
 - [k8s] (https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [komposer] (https://kompose.io/)
 
 # Setup DockerHub
 - docker login --username ksericpro 
@@ -29,11 +30,18 @@
 - sudo microk8s kubectl get namespaces
 - sudo microk8s kubectl delete -n default deployment microbot
 
-### dashboard
+## dashboard
 - sudo microk8s enable dashboard dns
 - sudo microk8s kubectl get services -n kube-system
 [Get Deployment]
 [Get IP of kubernetes-dashboard]
-- microk8s config | grep token 
+- sudo microk8s config | grep token 
 [Copy token]
 - Open IP:443, login using token
+
+## Create/Update service + deployment using komposer.io
+- kompose convert -f docker-compose.yml
+- sudo microk8s kubectl apply -f .
+
+## restart pods
+- sudo microk8s kubectl rollout restart -n default deployment user-ms
