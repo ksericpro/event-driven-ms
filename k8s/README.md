@@ -42,6 +42,9 @@
 ## Create/Update service + deployment using komposer.io
 - kompose convert -f docker-compose.yml
 - sudo microk8s kubectl apply -f .
-
+- changes
+    replicas: 2
+    comment #hostPort: 8000
+    
 ## restart pods
 - sudo microk8s kubectl rollout restart -n default deployment user-ms

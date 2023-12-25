@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: notification-ms
   name: notification-ms
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: notification-ms
@@ -43,7 +43,7 @@ spec:
           name: notification-ms
           ports:
             - containerPort: 8001
-              hostPort: 8001
+              #hostPort: 8001
               protocol: TCP
           resources: {}
           volumeMounts:
