@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress-user-ms
+  namespace: ingress-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  #- host: www.example.com
+  - http:
+      paths:
+      - path: /user
+        pathType: Prefix
+        backend:
+          service:
+            name: user-ms
+            port:
+              number: 8000
