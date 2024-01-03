@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sillyworld-deployment
+  namespace: ingress-nginx
+spec:
+  selector:
+    matchLabels:
+      app: sillyworld
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: sillyworld
+    spec:
+      containers:
+        - name: sillyworld
+          image: ksericpro/sillyworld:1.0.0
+          #imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
