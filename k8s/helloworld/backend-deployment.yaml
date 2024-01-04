@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: helloworld
-          image: ksericpro/backend:1.0.0
+          image: ksericpro/backend:1.1.0
           #imagePullPolicy: IfNotPresent
           imagePullPolicy: Always
           ports:
