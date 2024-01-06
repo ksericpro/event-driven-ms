@@ -7,13 +7,13 @@
 - [Use local image] (https://stackoverflow.com/questions/36874880/kubernetes-cannot-pull-local-image)
 - [compare service type] (https://kodekloud.com/blog/clusterip-nodeport-loadbalancer/)
 
-
 * Good Ones
 - [K8s services] (https://medium.com/@aedemirsen/kubernetes-servis-types-cluster-ip-node-port-loadbalancer-a073b7086a5f)
 - [Accessing pods thu services] (https://medium.com/@aedemirsen/kubernetes-and-load-balancing-1-358211fd9faa)
 - [Loadbanlancer & Ingress] (https://medium.com/@aedemirsen/kubernetes-loadbalancer-and-ingress-controller-7b448f6314f6)
 - [Test ingress] (https://phoenixnap.com/kb/microk8s-ingress)
-
+- [Ingress] (https://stackoverflow.com/questions/70795048/kubernetes-multiple-path-rewrites)
+- [link] (https://stackoverflow.com/questions/58009551/kubernetes-how-to-allow-two-pods-running-in-same-different-namespace-communicat)
 
 # Setup DockerHub
 - docker login --username ksericpro 
@@ -63,7 +63,7 @@
 ## Accessing Frontend services
 - sudo microk8s kubectl get services
     [copy cluster ip]
-    http://10.152.183.84:8001/notification/api/v1/
+    http://10.152.183.84:8001/api/v1/
 
 
 # Helloworld Deplomyment
@@ -161,13 +161,30 @@ nginx-ingress-helloworld   public   *  127.0.0.1   80      6m18s
 # rerollout deployment
 - sudo microk8s kubectl rollout restart deployment -n ingress-nginx
 
-# user-ms
+# user-ms + notification-ms
 
- - curl 10.152.183.44:8000/user/api/v1
+ - curl 10.152.183.44:8000/api/v1
  - sudo microk8s kubectl get svc -n ingress-nginx
- backend-service   LoadBalancer   10.152.183.131   10.64.140.44   80:30008/TCP   6h55m
- user-ms           LoadBalancer   10.152.183.162   10.64.140.43   81:30009/TCP   26m
+NAME                      TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)          AGE
+helloworld-service        LoadBalancer   10.152.183.63    10.64.140.43   80:30008/TCP     3d2h
+sillyworld-service        LoadBalancer   10.152.183.20    10.64.140.44   80:30009/TCP     3d2h
+user-ms-service           LoadBalancer   10.152.183.78    10.64.140.45   8000:30010/TCP   130m
+notification-ms-service   LoadBalancer   10.152.183.118   10.64.140.46   8001:30011/TCP   10m
 
 - sudo microk8s kubectl describe ingress nginx-ingress-user-ms -n ingress-nginx
-
 - sudo microk8s kubectl get ingress -n ingress-nginx
+
+# update ingress
+- sudo microk8s kubectl apply -f ingress.yaml
+
+# Get all pods namespace
+- sudo microk8s kubectl get pods -o wide --all-namespaces
+
+# Get logs
+- sudo microk8s kubectl logs [pod] -n [namespace]
+
+# Get Env
+- sudo microk8s kubectl exec [pod] printenv
+
+# inter service communications
+- <service-name>.<service-namespace>.svc.cluster.local

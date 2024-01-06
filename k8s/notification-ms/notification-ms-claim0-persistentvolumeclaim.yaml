@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: user-ms-claim0
-  name: user-ms-claim0
+    io.kompose.service: notification-ms-claim0
+  name: notification-ms-claim0
   namespace: ingress-nginx  
 spec:
   accessModes:

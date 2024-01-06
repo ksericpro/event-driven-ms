@@ -3,9 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: user-ms-claim0
-  name: user-ms-claim0
-  namespace: ingress-nginx  
+    io.kompose.service: pg-data
+  name: pg-data
 spec:
   accessModes:
     - ReadWriteOnce

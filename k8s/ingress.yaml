@@ -4,30 +4,43 @@ metadata:
   name: nginx-ingress
   namespace: ingress-nginx
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-origin: '$http_origin'
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
   #- host: www.example.com
   - http:
       paths:
-      - path: /helloworld
+      - path: /helloworld(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: helloworld-service
             port:
               number: 80
-      - path: /sillyworld
+      - path: /sillyworld(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: sillyworld-service
             port:
               number: 80
-      - path: /user
+      - path: /user(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: user-ms-service
             port:
-              number: 80
+              number: 8000
+      - path: /notification(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: notification-ms-service
+            port:
+              number: 8001

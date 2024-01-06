@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.network/kompose-default: "true"
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  containers:
+    - env:
+        - name: RABBITMQ_DEFAULT_PASS
+          value: guest
+        - name: RABBITMQ_DEFAULT_USER
+          value: guest
+      image: rabbitmq:management
+      livenessProbe:
+        exec:
+          command:
+            - rabbitmq-diagnostics check_port_connectivity
+        failureThreshold: 10
+        periodSeconds: 30
+        timeoutSeconds: 30
+      name: rabbitmq
+      ports:
+        - containerPort: 5672
+          hostPort: 5672
+          protocol: TCP
+        - containerPort: 15672
+          hostPort: 15672
+          protocol: TCP
+      resources: {}
+  restartPolicy: OnFailure
+status: {}
