@@ -20,11 +20,11 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 
 ## Curl Scripts
 ### Api root
-- curl http://localhost:8001/notification/api/v1
+- curl http://localhost:8001/api/v1
 
 ### Check API alive
-- curl localhost:8001/notification/api/v1/ping
+- curl localhost:8001/api/v1/ping
 
 ### Postgres
-- curl localhost:8001/notification/api/v1/db
+- curl localhost:8001/api/v1/db
 - curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8001/notification/api/v1/db

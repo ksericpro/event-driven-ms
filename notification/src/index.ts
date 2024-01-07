@@ -49,7 +49,11 @@ app.use(function(req, res, next) {
 // API ROUTES 
 const apiRoutes = express.Router();
 
-app.use(process.env.APP_NAME + Config.API_VERSION, apiRoutes);
+app.get("/", (req,res) => {
+  res.send("This is the server's notification response…")
+});
+
+app.use(Config.API_VERSION, apiRoutes);
 
 apiRoutes.get('/', (_req: Request, res: Response) => {
   res.json({message: 'Welcome to the coolest notification API on earth!'});
@@ -178,7 +182,7 @@ async function main() {
   })
 
   logger.info(`iosocket/web server@${PORT}`)
-  logger.info(`Magic happens at http://localhost:${PORT}${Config.APP_NAME}`)
+  logger.info(`Magic happens at http://localhost:${PORT}`)
   logger.info(`${Config.APP_FULL_NAME} ${Config.APP_VERSION} @all rights reserved. ${Config.APP_LAST_RELEASED_DATE}`)
 }
 

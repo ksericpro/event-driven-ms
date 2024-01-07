@@ -6,8 +6,9 @@ It provide a template of:
 - Code Quality = Eslint
 - Containerization = docker, docker-compose, kubernetes
 - ESB = RabbitMQ 
-- PostGres
+- PostGres user = Pooling
 - Pgadmin
+- Kubernetes with Nginx Ingress Controller
 
 ## Docker
 ### all
@@ -30,19 +31,16 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 
 ## Curl scripts
 ### Login
-- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/user/api/v1/user/login
+- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/api/v1/user/login
 
 ### Register
-- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/user/api/v1/user/register
+- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/api/v1/user/register
 
 ### Test Send RabbitMQ
-- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" -XPOST http://localhost:8000/user/api/v1/message
+- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" -XPOST http://localhost:8000/api/v1/message
 
 ### Test End to End Postgres
-- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/user/api/v1/user/register
-
-## Work in Progress
-- How to deploy to kubernetes
+- curl -H "content-type:application/json" -XPOST -d "{\"email\":\"test@gmail.com\", \"password\":\"123\"}" localhost:8000/api/v1/user/register
 
 ## Links
 - [part1 - Express API with Typescript] (https://rsbh.dev/blogs/rest-api-with-express-typescript)
@@ -76,3 +74,7 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 - [Postgres without orm-git] (https://github.com/ogwurujohnson/AwesomeNodePostgres)
 
 - [Postgres Pool] (https://node-postgres.com/apis/pool)
+
+## What's Next
+
+- Look out for next venture k8s daemonset for to eleasticsearch, k8s helm chart.
