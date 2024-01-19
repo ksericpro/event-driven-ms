@@ -74,7 +74,3 @@ PGADMIN_DEFAULT_PASSWORD: S3cret
 - [Postgres without orm-git] (https://github.com/ogwurujohnson/AwesomeNodePostgres)
 
 - [Postgres Pool] (https://node-postgres.com/apis/pool)
-
-## What's Next
-
-- Look out for next venture k8s daemonset for to eleasticsearch, k8s helm chart.

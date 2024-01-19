@@ -4,10 +4,20 @@ const app = express()
 
 const port = process.env.PORT || 8080;
 
-app.get("/", (req,res) => {
-  res.send("This is the server's hello response…")
+const prefix = "helloworld";
+
+app.get(`/`, (req,res) => {
+  res.send("alive");
+})
+
+app.get(`/${prefix}`, (req,res) => {
+  res.send("This is the server's hello response…");
+})
+
+app.get(`/${prefix}/ping`, (req,res) => {
+  res.send("ping");
 })
 
 app.listen(port,() => {
-  console.log(`Listening@${port}`);
+  console.log(`Listening@${prefix}:${port}`);
 })

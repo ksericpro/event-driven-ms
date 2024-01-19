@@ -29,6 +29,7 @@ const logger = loggerutils.getInstance().getLogger();
 
 //Constants
 const PORT = process.env.PORT || 8001;
+const prefix = Config.APP_NAME;
 
 //Express
 const app = express();
@@ -49,11 +50,15 @@ app.use(function(req, res, next) {
 // API ROUTES 
 const apiRoutes = express.Router();
 
-app.get("/", (req,res) => {
+app.get(`/`, (req,res) => {
+  res.send("alive");
+});
+
+app.get(`${prefix}`, (req,res) => {
   res.send("This is the server's notification response…")
 });
 
-app.use(Config.API_VERSION, apiRoutes);
+app.use(`${prefix}${Config.API_VERSION}`, apiRoutes);
 
 apiRoutes.get('/', (_req: Request, res: Response) => {
   res.json({message: 'Welcome to the coolest notification API on earth!'});

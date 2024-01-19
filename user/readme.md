@@ -43,13 +43,14 @@ http://localhost:8000/
 ## Curl commands
 
 ### Api root
-- curl http://localhost:8000/api/v1
+- curl http://localhost:8000/
+- curl http://localhost:8000/user/api/v1
 
 ### Swagger
-- curl http://localhost:8000/swagger/
+- curl http://localhost:8000/user/swagger/
 
 ### Check API alive
-- curl localhost:8000/api/v1/user/ping
+- curl localhost:8000/user/api/v1/user/ping
 
 ## Esint
 - npm init @eslint/config

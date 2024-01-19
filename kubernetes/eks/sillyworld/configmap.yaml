@@ -1,0 +1,8 @@
+# Source: ui/templates/configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sillyworld
+  namespace: ms-layer
+data:
+  AUTHORS: ericsee

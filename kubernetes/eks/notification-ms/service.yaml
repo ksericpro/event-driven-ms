@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  #annotations:
+  #  kompose.cmd: kompose convert -f docker-compose.yml
+  #  kompose.version: 1.31.2 (a92241f79)
+  #creationTimestamp: null
+  #labels:
+  #  io.kompose.service: notification-ms
+  name: notification-ms
+  namespace: ms-layer
+  labels:
+    app.kubernetes.io/created-by: eric-see
+spec:
+  #selector:
+  #  app: notification-ms
+  #ports:
+  #  - port: 8001
+  #    targetPort: 8001
+  #    nodePort: 30011
+  #type: LoadBalancer
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: notification-ms
+    app.kubernetes.io/instance: notification-ms
+    app.kubernetes.io/component: service
+  #selector:
+  #  io.kompose.service: notification-ms
+#status:
+  #loadBalancer: {}

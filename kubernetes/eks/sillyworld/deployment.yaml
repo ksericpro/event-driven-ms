@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sillyworld
+  namespace: ms-layer
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+spec:
+  replicas: 1
+  #how to find the pods
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sillyworld
+      app.kubernetes.io/instance: sillyworld
+      app.kubernetes.io/component: service
+  #pod naming & settings
+  template:
+    metadata:
+      #annotations:
+      #  prometheus.io/path: /metrics
+      #  prometheus.io/port: "8080"
+      #  prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: sillyworld
+        app.kubernetes.io/instance: sillyworld
+        app.kubernetes.io/component: service
+        app.kubernetes.io/created-by: eric-see
+    spec:
+      #serviceAccountName: catalog
+      #securityContext:
+      #  fsGroup: 1000
+      containers:
+        - name: sillyworld
+          #env:
+          #  - name: DB_USER
+          #    valueFrom:
+          #      secretKeyRef:
+          #        name: catalog-db
+          #        key: username
+          #  - name: DB_PASSWORD
+          #    valueFrom:
+          #      secretKeyRef:
+          #        name: catalog-db
+          #        key: password
+          envFrom:
+            - configMapRef:
+                name: sillyworld
+          #securityContext:
+          #  capabilities:
+          #    drop:
+          #    - ALL
+          #  readOnlyRootFilesystem: true
+          #  runAsNonRoot: true
+          #  runAsUser: 1000
+          #image: "public.ecr.aws/aws-containers/retail-store-sample-catalog:0.4.0"
+          image: ksericpro/sillyworld:2.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            successThreshold: 3
+            periodSeconds: 5
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          #volumeMounts:
+          #  - mountPath: /tmp
+          #    name: tmp-volume
+      #volumes:
+      #  - name: tmp-volume
+      #    emptyDir:
+      #      medium: Memory

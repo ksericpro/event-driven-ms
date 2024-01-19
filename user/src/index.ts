@@ -23,6 +23,7 @@ process.env.PORT = String(Config.PORT);
 //process.env.AMQP_URL = "amqp://guest:guest@127.0.0.1:5672";
 const AMQP_URL = process.env.AMQP_URL || Config.AMQP_URL;
 const QUEUE_NAME = process.env.QUEUE_NAME || Config.QUEUE_NAME;
+const prefix = Config.APP_NAME;
 
 //Logger
 import loggerutils from './services/logger';
@@ -56,13 +57,17 @@ app.use(function(req, res, next) {
 // API ROUTES 
 const apiRoutes = express.Router();
 
-app.get("/", (req,res) => {
+app.get(`/`, (req,res) => {
+  res.send("alive");
+})
+
+app.get(`${prefix}`, (req,res) => {
   res.send("This is the server's user response…")
 });
 
-app.use(Config.API_VERSION, apiRoutes);
+app.use(`${prefix}${Config.API_VERSION}`, apiRoutes);
 
-apiRoutes.get('/', function(_req, res) {
+apiRoutes.get('/', function(req, res) {
   res.json({message: 'Welcome to the coolest user API on earth!'});
 });
 
@@ -91,7 +96,7 @@ apiRoutes.use('/user', userRoute);
 async function main() {
 
   app.use(
-    "/swagger",
+    `${prefix}/swagger`,
     swaggerUi.serve,
     swaggerUi.setup(undefined, {
       swaggerOptions: {

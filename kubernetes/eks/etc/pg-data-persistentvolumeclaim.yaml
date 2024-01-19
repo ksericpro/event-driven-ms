@@ -3,12 +3,14 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: notification-ms-claim0
-  name: notification-ms-claim0
+    io.kompose.service: pg-data
+  name: pg-data
+  namespace: common-utils
 spec:
+  #storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 50Mi
 status: {}

@@ -6,54 +6,14 @@
     "auditLog": "logs/.19ccff0e7591a5c8e70838548b89c5eb6817acc3-audit.json",
     "files": [
         {
-            "date": 1703400514132,
-            "name": "logs/notification-2023-12-24-14.log",
-            "hash": "3eff6aab27a1cb4a92e11da2b0ef36c724473ee03d9c49a1c34926384f83026f"
-        },
-        {
-            "date": 1703407026435,
-            "name": "logs/notification-2023-12-24-16.log",
-            "hash": "de6018f2b6963e7713aa3ec024a4d5eaf79e948ad6e33ac73ad929448f52a602"
-        },
-        {
-            "date": 1703408851504,
-            "name": "logs/notification-2023-12-24-17.log",
-            "hash": "4e4ce07737ef836422087880c3f998401e2813044b3be5522997d38502517aed"
-        },
-        {
-            "date": 1703425821926,
-            "name": "logs/notification-2023-12-24-21.log",
-            "hash": "c6bbf56fd7b3eafdf3f7ae1eac7ca984014ab7c5070a16f29b7e71ec6348f4f4"
-        },
-        {
-            "date": 1703430036786,
-            "name": "logs/notification-2023-12-24-23.log",
-            "hash": "afa39e18d29c725685588e10bb908be879b0e47ee327c0bccfe6b7f0ea706ac2"
-        },
-        {
-            "date": 1703433693574,
-            "name": "logs/notification-2023-12-25-00.log",
-            "hash": "6f56885267873e4d9a2bcc6b9c05b1d2f5b1d4c8d06f21ff481bbe4252e468f8"
-        },
-        {
-            "date": 1703444180598,
-            "name": "logs/notification-2023-12-25-02.log",
-            "hash": "f59399fe2426c58afb436b9a4138211db4f3b25fb1f23684a4f4802efe1398ed"
-        },
-        {
-            "date": 1703444431547,
-            "name": "logs/notification-2023-12-25-03.log",
-            "hash": "701ccd38b9c949e324a610dbdf16a3ac5d5a6c92fe0f6fdda2406023ce8c17c8"
-        },
-        {
-            "date": 1703448829465,
-            "name": "logs/notification-2023-12-25-04.log",
-            "hash": "5d82acd267263c41577411a9c55b87cfb554762bdccc58f3f804c848f0eb5a14"
-        },
-        {
             "date": 1704553048739,
             "name": "logs/notification-2024-01-06-22.log",
             "hash": "d31229ece1b2031bd376af34a9b05d6ef32dccabef323a1826742613afe05649"
+        },
+        {
+            "date": 1705637109980,
+            "name": "logs\\notification-2024-01-19-12.log",
+            "hash": "682594c3bd0550820a492ca7b01b2a1e75cad46c8bed5a87ffa04abb5b812d70"
         }
     ],
     "hashType": "sha256"

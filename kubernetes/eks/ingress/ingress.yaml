@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ms-layer
+  namespace: ms-layer
+  labels:
+    app.kubernetes.io/created-by: eric-see
+  annotations:
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    # HIGHLIGHT
+    #alb.ingress.kubernetes.io/rewrite-target: /
+    #alb.ingress.kubernetes.io/use-regex: "true"
+    #alb.ingress.kubernetes.io/ssl-redirect: "false"
+
+    alb.ingress.kubernetes.io/group.name: retail-app-group
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+spec:
+  ingressClassName: alb
+  rules:
+  - host: hello.citynexus-dev.com
+    http:
+      paths:
+      - path: /helloworld
+        pathType: Prefix
+        backend:
+          service:
+            name: helloworld
+            port:
+              number: 80
+      - path: /sillyworld
+        pathType: Prefix
+        backend:
+          service:
+            name: sillyworld
+            port:
+              number: 80
+      - path: /user
+        pathType: Prefix
+        backend:
+          service:
+            name: user-ms
+            port:
+              number: 80
+      - path: /notification
+        pathType: Prefix
+        backend:
+          service:
+            name: notification-ms
+            port:
+              number: 80

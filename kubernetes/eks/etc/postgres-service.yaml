@@ -4,16 +4,18 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.31.2 (a92241f79)
+    app.kubernetes.io/created-by: eric-see
   creationTimestamp: null
   labels:
-    io.kompose.service: pgadmin
-  name: pgadmin
+    io.kompose.service: postgres
+  name: postgres
+  namespace: common-utils
 spec:
   ports:
-    - name: "8888"
-      port: 8888
-      targetPort: 80
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   selector:
-    io.kompose.service: pgadmin
+    io.kompose.service: postgres
 status:
   loadBalancer: {}
