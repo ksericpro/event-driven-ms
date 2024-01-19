@@ -18,7 +18,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: hello.citynexus-dev.com
+  - host: hello.xxx.com
     http:
       paths:
       - path: /helloworld
