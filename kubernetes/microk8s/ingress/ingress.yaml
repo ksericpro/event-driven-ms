@@ -2,14 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
-  namespace: ingress-nginx
+  namespace: ms-layer
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-origin: '$http_origin'
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$1/$2
+    #nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
@@ -20,27 +20,30 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: helloworld-service
+            name: helloworld
             port:
               number: 80
-      - path: /sillyworld(/|$)(.*)
+      #- path: /sillyworld(/|$)(.*)
+      - path: /sillyworld
         pathType: Prefix
         backend:
           service:
-            name: sillyworld-service
+            name: sillyworld
             port:
               number: 80
-      - path: /user(/|$)(.*)
+      #- path: /user(/|$)(.*)
+      - path: /user
         pathType: Prefix
         backend:
           service:
-            name: user-ms-service
+            name: user-ms
             port:
-              number: 8000
-      - path: /notification(/|$)(.*)
+              number: 80
+      #- path: /notification(/|$)(.*)
+      - path: /notification
         pathType: Prefix
         backend:
           service:
-            name: notification-ms-service
+            name: notification-ms
             port:
-              number: 8001
+              number: 80
