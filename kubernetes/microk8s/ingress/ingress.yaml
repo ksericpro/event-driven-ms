@@ -16,7 +16,8 @@ spec:
   #- host: www.example.com
   - http:
       paths:
-      - path: /helloworld(/|$)(.*)
+      #- path: /helloworld(/|$)(.*)
+      - path: /helloworld
         pathType: Prefix
         backend:
           service:

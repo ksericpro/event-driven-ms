@@ -21,6 +21,7 @@ spec:
       targetPort: 8001
       nodePort: 30111
   type: LoadBalancer
+  #type: NodePort
   #selector:
   #  io.kompose.service: notification-ms
 #status:
