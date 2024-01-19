@@ -7,15 +7,19 @@ metadata:
   #creationTimestamp: null
   #labels:
   #  io.kompose.service: notification-ms
-  name: notification-ms-service
-  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+  name: notification-ms
+  namespace: ms-layer
 spec:
   selector:
     app: notification-ms
   ports:
-    - port: 8001
+    - port: 80
+      protocol: TCP
       targetPort: 8001
-      nodePort: 30011
+      nodePort: 30111
   type: LoadBalancer
   #selector:
   #  io.kompose.service: notification-ms

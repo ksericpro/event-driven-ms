@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+  name: sillyworld
+  namespace: ms-layer
+spec:
+  selector:
+    app: sillyworld
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8081
+      #nodePort: 30100
+  #type: LoadBalancer
+  type: ClusterIP

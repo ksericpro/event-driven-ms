@@ -4,10 +4,12 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.31.2 (a92241f79)
+    app.kubernetes.io/created-by: eric-see
   creationTimestamp: null
   labels:
     io.kompose.service: postgres
   name: postgres
+  namespace: common-utils
 spec:
   replicas: 1
   selector:
@@ -33,7 +35,7 @@ spec:
               value: S3cret
             - name: POSTGRES_USER
               value: event-driven-user
-          image: postgres:14-alpine
+          image: postgres:latest
           name: postgres
           ports:
             - containerPort: 5432

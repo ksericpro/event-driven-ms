@@ -5,10 +5,11 @@ metadata:
   labels:
     io.kompose.service: pg-data
   name: pg-data
+  namespace: common-utils
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 50Mi
 status: {}

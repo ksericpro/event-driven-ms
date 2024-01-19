@@ -7,15 +7,19 @@ metadata:
   #creationTimestamp: null
   #labels:
   #  io.kompose.service: user-ms
-  name: user-ms-service
-  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+  name: user-ms
+  namespace: ms-layer
 spec:
   selector:
     app: user-ms
   ports:
-    - port: 8000
+    - port: 80
+      protocol: TCP
       targetPort: 8000
-      nodePort: 30010
+      nodePort: 30101
   type: LoadBalancer
   #selector:
   #  io.kompose.service: user-ms

@@ -4,20 +4,6 @@
 
 - Install AWS CLI
 
-# sso 
-- https://d-9667063f4b.awsapps.com/start#/
-
-# configure credentials
-- aws configure sso
-    > sso_start_url:https://d-9667063f4b.awsapps.com/start#
-    > sso_region:ap-southeast-1
-
-
-# set temporary keys to enviroment
-$Env:AWS_ACCESS_KEY_ID="ASIARPWI7AENQ6NP6F7O"
-$Env:AWS_SECRET_ACCESS_KEY="53k4yZIUyJY8K9gAG6u6r4i7XVBH/2Emw1loJPxY"
-$Env:AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEDQaDmFwLXNvdXRoZWFzdC0xIkYwRAIgcSkOKUOTdb/uZuaWxeqQSLpGclOBfE5c9iSuKuQ2OMsCIBhyq5neZhV3ZmvT5V0ndDTFSrf0czVDm5qSoRQkHA0TKo0DCM3//////////wEQAhoMMTAyNDI2OTM1NTc5IgxS1ojYE9Qnjdz3M8cq4QKdSf3/Ub1ECR0zFP+1o51E6xdROKEfIUQtygQUJuxDwQgYFsrEfY/rUZde2Km7jILOaPzAyC4Pq7dGvvItyGgAt2XSGB6WnDobRyjfss5YC9dhTGdkuARsQWmNcQwATyveWxacj9G0vJgdfr8dYR2StnF7fhNhdBNx6k00qlv2kApUdHPmdeguSSRNkUkC7S8qiG7qHBGXulrmepdT/51KITt/owAVEhlUBRm1Uw13IvYB33akotquXMlLukuyILh+o7/2MZrWgh7vouJvvrou2pWu+Jen2pjIesgS6OVjs2h2p+MtxmJM5kCpQRSYCgJPa/kwNt4MnSIkZ7v/Ry4jbe7EGV1Mc52YI/VCpTLzaKP1mQS5696TYDA9llXccLMkxltdoXzajHGHZEIMzvjrvEyCE0V3UeTFvZ1FoOn0LCwR4aXUbAVjdJCyF8wJC7t5X9VxcR1dUjCcfJCRGmf3FjDj7e2sBjqnAWzMrUWOKTC3ihOZOhvkCQglpFA+y6oorNutYcpjfN+xWYMEprz4MkRp4spcQe3pcWLhM7lNim2+cfn7tlOadgBRVIpeCk/yqSlf+sYBQN4kKN8TMq06QcSvIajLpuWHRNIaMKWVdRRLYrfTYTyofsbgszgiK28yUKWHjUZhxBGKGl9AaJDS2v8Psp/vjcMtyJhxEQ2+4Gp+7Q0IjN2HfIR+rrmV6eFK"
-
 # get user credentials
 - aws sts get-caller-identity
 - aws sts get-caller-identity --no-verify-ssl
@@ -25,81 +11,11 @@ $Env:AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEDQaDmFwLXNvdXRoZWFzdC0xIkYwRAIgcSkOKUOT
 # update eks config to local
 - aws eks update-kubeconfig --name eks-citynexus-sandbox
 Added new context arn:aws:eks:ap-southeast-1:102426935579:cluster/eks-citynexus-sandbox to C:\Users\kiansengs\.kube\config
-
-# get namespace
-- kubectl get namespaces
-NAME              STATUS   AGE
-assets            Active   38m
-carts             Active   38m
-catalog           Active   38m
-checkout          Active   38m
-default           Active   100m
-kube-node-lease   Active   100m
-kube-public       Active   100m
-kube-system       Active   100m
-orders            Active   38m
-other             Active   38m
-rabbitmq          Active   38m
-ui                Active   
-
-# ingress
-- kubectl get ingress -A
-NAMESPACE   NAME      CLASS   HOSTS   ADDRESS                                                                     PORTS   AGE
-catalog     catalog   alb     *       k8s-retailappgroup-51b81dfc7a-1242021702.ap-southeast-1.elb.amazonaws.com   80      32m
-ui          ui        alb     *       k8s-retailappgroup-51b81dfc7a-1242021702.ap-southeast-1.elb.amazonaws.com   80      32m
-
-- kubectl describe ingress catalog -n catalog
-Name:             catalog
-Labels:           app.kubernetes.io/created-by=eks-workshop
-Namespace:        catalog
-Address:          k8s-retailappgroup-51b81dfc7a-1242021702.ap-southeast-1.elb.amazonaws.com
-Ingress Class:    alb
-Default backend:  <default>
-Rules:
-  Host        Path  Backends
-  ----        ----  --------
-  *
-              /catalogue   catalog:80 (10.43.160.116:8080)
-Annotations:  alb.ingress.kubernetes.io/group.name: retail-app-group
-              alb.ingress.kubernetes.io/healthcheck-path: /health
-              alb.ingress.kubernetes.io/target-type: ip
-Events:
-  Type     Reason                  Age                From     Message
-  ----     ------                  ----               ----     -------
-  Warning  FailedBuildModel        34m                ingress  Failed build model due to couldn't auto-discover subnets: unable to resolve at least one subnet (0 match VPC and tags)
-  Normal   SuccessfullyReconciled  34m (x2 over 34m)  ingress  Successfully reconciled
-
-- kubectl describe ingress ui -n ui
-Name:             ui
-Labels:           app.kubernetes.io/created-by=eks-workshop
-Namespace:        ui
-Address:          k8s-retailappgroup-51b81dfc7a-1242021702.ap-southeast-1.elb.amazonaws.com
-Ingress Class:    alb
-Default backend:  <default>
-Rules:
-  Host        Path  Backends
-  ----        ----  --------
-  *
-              /   ui:80 (10.43.185.56:8080)
-Annotations:  alb.ingress.kubernetes.io/group.name: retail-app-group
-              alb.ingress.kubernetes.io/healthcheck-path: /actuator/health/liveness
-              alb.ingress.kubernetes.io/scheme: internet-facing
-              alb.ingress.kubernetes.io/target-type: ip
-Events:
-  Type    Reason                  Age                From     Message
-  ----    ------                  ----               ----     -------
-  Normal  SuccessfullyReconciled  35m (x2 over 35m)  ingress  Successfully reconciled
   
 # get 
 - kubectl get service -n ingress-nginx
 - kubectl get deployment -n ingress-nginx
 - kubectl get pods -n ingress-nginx
-
-# get nodes of cluster
-- kubectl get nodes
-NAME                                               STATUS   ROLES    AGE   VERSION
-ip-10-43-124-116.ap-southeast-1.compute.internal   Ready    <none>   41d   v1.27.7-eks-e71965b
-ip-10-43-133-151.ap-southeast-1.compute.internal   Ready    <none>   41d   v1.27.7-eks-e71965b
 
 # ecr
 - aws ecr list-images --repository-name citynexus

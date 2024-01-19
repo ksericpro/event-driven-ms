@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  #annotations:
+  #  kompose.cmd: kompose convert -f docker-compose.yml
+  #  kompose.version: 1.31.2 (a92241f79)
+  #creationTimestamp: null
+  #labels:
+  #  io.kompose.service: notification-ms
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+  name: notification-ms
+  namespace: ms-layer 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      #io.kompose.service: notification-ms
+      app: notification-ms
+  strategy:
+    type: Recreate
+  template:
+    #metadata:
+    #  annotations:
+    #    kompose.cmd: kompose convert -f docker-compose.yml
+    #    kompose.version: 1.31.2 (a92241f79)
+    #  creationTimestamp: null
+    #  labels:
+    #    io.kompose.network/kompose-default: "true"
+    #    io.kompose.service: notification-ms
+    metadata:
+      labels:
+        app: notification-ms
+    spec:
+      containers:
+        - env:
+            - name: AMQP_URL
+              #value: amqp://guest:guest@rabbitmq:5672
+              value: amqp://guest:guest@rabbitmq.common-utils.svc.cluster.local:5672
+            - name: DB_DATABASE
+              value: event-driven_db
+            - name: DB_HOST
+              #value: postgres
+              value: postgres.common-utils.svc.cluster.local
+            - name: DB_PASSWORD
+              value: S3cret
+            - name: DB_USER
+              value: event-driven-user
+            - name: QUEUE
+              value: event_driven
+          image: ksericpro/notification-ms:2.0.0
+          name: notification-ms
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /app/src
+              name: notification-ms-claim0
+      restartPolicy: Always
+      volumes:
+        - name: notification-ms-claim0
+          persistentVolumeClaim:
+            claimName: notification-ms-claim0
+#status: {}

@@ -5,11 +5,11 @@ metadata:
   labels:
     io.kompose.service: notification-ms-claim0
   name: notification-ms-claim0
-  namespace: ingress-nginx  
+  namespace: ms-layer  
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 50Mi
 status: {}

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/created-by: eric-see
+    app.kubernetes.io/type: app
+  name: sillyworld
+  namespace: ms-layer
+spec:
+  selector:
+    matchLabels:
+      app: sillyworld
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: sillyworld
+    spec:
+      containers:
+        - name: sillyworld
+          image: ksericpro/sillyworld:2.0.0
+          imagePullPolicy: IfNotPresent
+          #imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+              protocol: TCP

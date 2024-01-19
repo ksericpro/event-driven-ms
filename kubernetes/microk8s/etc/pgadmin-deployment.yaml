@@ -4,10 +4,12 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.31.2 (a92241f79)
+    app.kubernetes.io/created-by: eric-see
   creationTimestamp: null
   labels:
     io.kompose.service: pgadmin
   name: pgadmin
+  namespace: common-utils
 spec:
   replicas: 1
   selector:
