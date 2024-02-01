@@ -1,0 +1,11 @@
+{
+    "PORT": 8081,
+    "PREFIX": "sillyworld",
+    "REDIS": {"port":6379, "server":"127.0.0.1", "topics": [
+        {"key":"heartbeat", "topic":"/SWS/HEARTBEAT", "ws_topic":"heartbeats"},
+        {"key":"event", "topic":"/SWS/EVENT", "ws_topic":"events"},
+        {"key":"snapshot", "topic":"/SWS/SNAPSHOT", "ws_topic":"snapshots"},
+        {"key":"feedback", "topic":"/SWS/FEEDBACK", "ws_topic":"feedbacks"},
+        {"key":"monitoring", "topic":"/SWS/MONITORING", "ws_topic":"monitorings"}
+    ]}
+}

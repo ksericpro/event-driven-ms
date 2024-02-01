@@ -1,0 +1,11 @@
+{
+    "PORT": 8081,
+    "PREFIX": "sillyworld",
+    "REDIS": {"port":6666, "server":"awsdevcn2ris-001.pwdomp.0001.apse1.cache.amazonaws.com", "topics": [
+        {"key":"heartbeat", "topic":"/SWS/HEARTBEAT", "ws_topic":"heartbeats"},
+        {"key":"event", "topic":"/SWS/EVENT", "ws_topic":"events"},
+        {"key":"snapshot", "topic":"/SWS/SNAPSHOT", "ws_topic":"snapshots"},
+        {"key":"feedback", "topic":"/SWS/FEEDBACK", "ws_topic":"feedbacks"},
+        {"key":"monitoring", "topic":"/SWS/MONITORING", "ws_topic":"monitorings"}
+    ]}
+}
