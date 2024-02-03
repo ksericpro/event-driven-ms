@@ -47,8 +47,9 @@ class DarkMatterLogger:
 
 # if we receive a "quit" message, then stop processing
 class DarkMatterViewer:
-    def __init__ (self):
+    def __init__ (self, topic):
         print("DM Viewer init")
+        print("topic={}".format(topic))
 
         credentials = pika.PlainCredentials(APP_USER, APP_PASS)
         conn_params = pika.ConnectionParameters(host=RABBITMQ_SERVER, virtual_host=VHOST_DARKMATTER,
@@ -93,7 +94,13 @@ def main():
             dml.sendMessage("tres")
             dml.sendMessage("follow @k0emt on twitter! (that's a zero after the k)")
             dml.sendMessage(STOP_PROCESSING_MESSAGE)
+        elif sys.argv[1] == "receive":
+            topic="test"
+            if len(sys.argv)>2:
+                topic = sys.argv[2]
+            dmViewer = DarkMatterViewer(topic)
     else:
-        dmViewer = DarkMatterViewer()
+        print("{} send|receive".format(sys.argv[0]))
+        #dmViewer = DarkMatterViewer()
 
 main()
