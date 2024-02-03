@@ -57,6 +57,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitma-data:/var/lib/rabbitmq/mnesia
     deploy:
       restart_policy:
         condition: on-failure
@@ -95,6 +97,7 @@ services:
 volumes:
   pg-data:
   pgadmin-data:
+  rabbitmq-data:
 
 #volumes:
 #  user_data: 

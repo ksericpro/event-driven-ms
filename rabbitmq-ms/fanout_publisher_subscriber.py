@@ -49,7 +49,8 @@ class DarkMatterLogger:
 class DarkMatterViewer:
     def __init__ (self, topic):
         print("DM Viewer init")
-        print("topic={}".format(topic))
+        self.topic = topic
+        print("topic={}".format(self.topic))
 
         credentials = pika.PlainCredentials(APP_USER, APP_PASS)
         conn_params = pika.ConnectionParameters(host=RABBITMQ_SERVER, virtual_host=VHOST_DARKMATTER,
@@ -59,7 +60,7 @@ class DarkMatterViewer:
 
         #ourChan = channel.queue_declare(exclusive=True, queue='test')
         # if exclusive is True, only one consumer is allowed
-        ourChan = channel.queue_declare(exclusive=False, queue='test')
+        ourChan = channel.queue_declare(exclusive=False, queue=self.topic)
 
         channel.queue_bind(exchange=EXCHANGE_DARKMATTER, queue=ourChan.method.queue)
 
@@ -77,7 +78,7 @@ class DarkMatterViewer:
             return
 
         channel.basic_qos(prefetch_count=1)
-        channel.basic_consume(queue='test', on_message_callback=msg_consumer, auto_ack=False)
+        channel.basic_consume(queue=self.topic, on_message_callback=msg_consumer, auto_ack=False)
 
         channel.start_consuming()
 

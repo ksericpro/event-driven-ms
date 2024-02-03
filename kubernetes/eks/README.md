@@ -157,3 +157,4 @@ Events:
 # references
 - [link] (https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html)
 - [PGDATA] (https://serverfault.com/questions/1018377/postgres-mount-volume-error-in-k8s)
+- [Kong] (https://medium.com/@martin.hodges/using-kong-to-access-kubernetes-services-using-a-gateway-resource-with-no-cloud-provided-8a1bcd396be9)
