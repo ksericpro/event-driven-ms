@@ -1,10 +1,9 @@
 apiVersion: configuration.konghq.com/v1
-kind: KongPlugin
+kind: KongConsumer
 metadata:
-  name: rate-limit-5-min
+  name: alex
   annotations:
     kubernetes.io/ingress.class: kong
-config:
-  minute: 20
-  policy: local
-plugin: rate-limiting
+username: alex
+credentials:
+- alex-key-auth

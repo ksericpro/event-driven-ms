@@ -49,7 +49,7 @@ kong/ingress	0.10.2       	3.4        	Deploy Kong Ingress Controller and Kong G
 
 ## 1. Populate $PROXY_IP for future commands:
 - export PROXY_IP=$(kubectl get svc --namespace kong kong-gateway-proxy -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo $PROXY_IP
+- echo $PROXY_IP
 
 ## 2. Ensure that you can call the proxy IP:
 - curl -i $PROXY_IP
@@ -101,7 +101,7 @@ With IP address 10.1.97.241.
 
 ## 1. Create
 - cd plugins
-- kubectl appy -f rate-limit.yaml
+- kubectl apply -f rate-limit.yaml
 kongplugin.configuration.konghq.com/rate-limit-5-min created
 - kubectl get KongPlugin
 NAME               PLUGIN-TYPE     AGE   PROGRAMMED
@@ -111,3 +111,76 @@ rate-limit-5-min   rate-limiting   17s
 - kubectl annotate service echo konghq.com/plugins=rate-limit-5-min
 - kubectl annotate httproute echo konghq.com/plugins=rate-limit-5-min
 
+## Test Rate-limit
+- for i in `seq 60`; do curl -sv $PROXY_IP/echo 2>&1 | grep "< HTTP"; done
+< HTTP/1.1 429 Too Many Requests
+< HTTP/1.1 429 Too Many Requests
+< HTTP/1.1 429 Too Many Requests
+< HTTP/1.1 429 Too Many Requests
+< HTTP/1.1 429 Too Many Requests
+< HTTP/1.1 429 Too Many Requests
+
+
+# Caching
+
+## 1. Create
+- cd plugins
+- kubectl apply -f caching.yaml
+kongclusterplugin.configuration.konghq.com/proxy-cache-all-endpoints created
+
+## Test Caching
+- for i in `seq 6`; do curl -sv $PROXY_IP/echo 2>&1 | grep -E "(Status|< HTTP)"; done
+"(Status|< HTTP)"; done
+< HTTP/1.1 200 OK
+< X-Cache-Status: Miss
+< HTTP/1.1 200 OK
+< X-Cache-Status: Hit
+< HTTP/1.1 200 OK
+< X-Cache-Status: Hit
+< HTTP/1.1 200 OK
+< X-Cache-Status: Hit
+< HTTP/1.1 200 OK
+
+
+# Authentication
+
+## 1. Create
+- cd plugins
+- kubectl apply -f key-auth.yaml
+kongplugin.configuration.konghq.com/key-auth created
+
+## Apply the key-auth plugin to the echo service in addition to the previous rate-limit plugin.
+- kubectl annotate service echo konghq.com/plugins=rate-limit-5-min,key-auth --overwrite
+service/echo annotated
+
+## Test
+- curl -i $PROXY_IP/echo
+HTTP/1.1 401 Unauthorized
+Date: Mon, 05 Feb 2024 03:05:47 GMT
+Content-Type: application/json; charset=utf-8
+Connection: keep-alive
+WWW-Authenticate: Key realm="kong"
+Content-Length: 96
+X-Kong-Response-Latency: 2
+Server: kong/3.5.0
+X-Kong-Request-Id: 637b06508042076cce124a5a1cb28c7c
+
+{
+  "message":"No API key found in request",
+  "request_id":"637b06508042076cce124a5a1cb28c7c"
+}
+
+## Create Secret
+- kubectl apply -f secret.yaml
+secret/alex-key-auth created
+
+## Create Consumer
+- kubectl apply -f consumer.yaml 
+kongconsumer.configuration.konghq.com/alex created
+
+## Test Again
+- curl -H 'apikey: hello_world' $PROXY_IP/echo
+Welcome, you are connected to node zackary-latitude-5480.
+Running on Pod echo-965f7cf84-wcmvt.
+In namespace default.
+With IP address 10.1.97.234.
